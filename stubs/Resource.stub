@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Resources;
+
+use App\Models\{{modelName}};
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
+
+class {{modelName}}Resource extends JsonResource
+{
+    public function toArray($request): array
+    {
+        return $this->getFillableRecord($this);
+    }
+
+    public function getFillableRecord($item): array
+    {
+        $data = [];
+        foreach ($this->getModelData() as $field) {
+            $data[$field] = $item->{$field} ?? '';
+        }
+        return $data;
+    }
+
+    public function getModelData(): array
+    {
+        $role = new  {{modelName}}();
+        $fillable = array_merge($role->getFillable(), ($this->getIncludeFields()));
+        return Arr::except($fillable, array_flip($this->getExceptFields()));
+    }
+
+    public function getIncludeFields(): array
+    {
+        return [];
+    }
+
+    public function getExceptFields(): array
+    {
+        return [];
+    }
+}

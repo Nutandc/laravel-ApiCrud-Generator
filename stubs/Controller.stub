@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Requests\{{modelName}}Request;
+use App\Models\{{modelName}};
+use App\Http\Resources\{{modelName}}Resource;
+use App\Http\Controllers\BaseController;
+use App\Repositories\CommonRepository;
+use Illuminate\Support\Facades\DB;
+use JetBrains\PhpStorm\Pure;
+use Illuminate\Http\JsonResponse;
+use Throwable;
+
+
+class {{modelName}}Controller extends BaseController
+{
+    protected CommonRepository $repository;
+
+    #[Pure] public function __construct(protected {{modelName}} ${{modelNameSingularLowerCase}})
+    {
+        $this->repository = new CommonRepository(${{modelNameSingularLowerCase}});
+    }
+
+    public function index(): JsonResponse
+    {
+     ${{modelNamePluralLowerCase}} = {{modelName}}Resource::collection($this->repository->getAll());
+     return $this->respondWithResourceCollection(${{modelNamePluralLowerCase}});
+    }
+
+    public function store({{modelName}}Request $request): mixed
+    {
+        try {
+            $validated = $request->validated();
+            return DB::transaction(function () use ($request, $validated) {
+                $this->repository->create($validated);
+                return $this->respondSuccess('{{modelName}} created successfully');
+            });
+        } catch (Throwable $e) {
+            return $this->respondError($e->getMessage());
+        }
+    }
+
+    public function show({{modelName}} ${{modelNameSingularLowerCase}}): JsonResponse
+    {
+        $data = new {{modelName}}Resource(${{modelNameSingularLowerCase}});
+        return $this->respondSuccess($data);
+    }
+
+    public function update({{modelName}}Request $request, {{modelName}} ${{modelNameSingularLowerCase}}): mixed
+    {
+        try {
+            $validated = $request->validated();
+            return DB::transaction(function () use ($validated, ${{modelNameSingularLowerCase}}) {
+                ${{modelNameSingularLowerCase}}->update($validated);
+                return $this->respondSuccess('{{modelName}} Updated successfully');
+            });
+        } catch (Throwable $e) {
+            return $this->respondError($e->getMessage());
+        }
+    }
+
+
+    public function destroy({{modelName}} ${{modelNameSingularLowerCase}}): JsonResponse
+    {
+        try {
+            ${{modelNameSingularLowerCase}}->delete();
+            return $this->respondSuccess('{{modelName}} Deleted successfully');
+        } catch (\Exception $e) {
+            return $this->respondError($e->getMessage());
+        }
+    }
+}
