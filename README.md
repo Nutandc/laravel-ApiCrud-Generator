@@ -1,4 +1,4 @@
-# Laravel Api Crud Generator
+# Laravel Api CRUD Generator
 
 Laravel Api Crud Generator with Creator: { Model, Controller, Request, Resource, Migrations, Api Route Resource}
 
