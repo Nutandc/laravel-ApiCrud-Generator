@@ -6,6 +6,8 @@ Laravel Api Crud Generator with Creator: { Model, Controller, Request, Resource,
 - PHP version: 8.*
 - Laravel Version: 9.*
 
+## Maim Features
+- You can pass database column via cli console, that will reflact to migration, model and request file.
 
 ## Key Features
 1. Controller with Resource and Repo Pattern
@@ -250,6 +252,9 @@ return new class extends Migration
     }
 };
 ```
+
+### Issues with coppying Files??
+**Package Discovering Soon**
 
 - [x] # Smile😃
 > Eat
